@@ -39,7 +39,7 @@ def linearMapping(img):
 
 
 # 高斯响应
-def getGuassResponse(img, gt):
+def getGuassResponse(img, gt, sigma):
     # 获取图像的高宽
     height, width = img.shape
     # 获取网格
@@ -48,9 +48,10 @@ def getGuassResponse(img, gt):
     centerX = gt[0] + 0.5 * gt[2]
     centerY = gt[1] + 0.5 * gt[3]
     # 计算距离
-    distance = (np.square(xx - centerX) + np.square(yy - centerY)) / (2 * self.args.sigma)
+    distance = (np.square(xx - centerX) + np.square(yy - centerY)) / (2 * sigma)
     # 获取响应图
     response = np.exp(-distance)
     # 归一化
     response = linearMapping(response)
-    return response
+
+    return response[gt[1]: gt[1] + gt[3], gt[0]: gt[0] + gt[2]]
